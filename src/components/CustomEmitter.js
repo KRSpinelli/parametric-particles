@@ -36,7 +36,7 @@ class CustomEmitter extends Proton.Emitter {
         this.yorigin = y;
     }
 
-    setSpeed(speed) {
+    setDrawSpeed(speed) {
         this.speed = parseFloat(speed);
     }
 

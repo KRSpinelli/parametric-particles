@@ -10,17 +10,27 @@ function App() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [size, setSize] = useState(1);
   const [drawSpeed, setDrawSpeed] = useState(0.01);
+  const [xDrift, setXDrift] = useState(5);
+  const [yDrift, setYDrift] = useState(5);
+  const [driftDelay, setDriftDelay] = useState(0.1);
   const particlesRef = useRef(null);
 
   return (
     <div className="App">
-      <Particles ref={particlesRef} size={size} speed={drawSpeed} formula={formula} />
+      <Particles
+        ref={particlesRef}
+        size={size}
+        drawSpeed={drawSpeed}
+        formula={formula}
+        xDrift={xDrift}
+        yDrift={yDrift}
+        driftDelay={driftDelay} />
 
       {!isPanelOpen && (
         <div className="button-container">
           <button
             className="gear-button"
-            onClick={() => setIsPanelOpen(!isPanelOpen)}
+            onClick={() => setIsPanelOpen(true)}
             aria-label="Settings"
           >
             <SettingsIcon sx={{ fontSize: 24 }} />
@@ -39,14 +49,15 @@ function App() {
         </div>
       )}
 
-
-
       {isPanelOpen && (
         <>
           <ControlPanel formula={formula} setFormula={setFormula}
             isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen}
             size={size} setSize={setSize}
-            drawSpeed={drawSpeed} setDrawSpeed={setDrawSpeed} />
+            drawSpeed={drawSpeed} setDrawSpeed={setDrawSpeed}
+            xDrift={xDrift} setXDrift={setXDrift}
+            yDrift={yDrift} setYDrift={setYDrift}
+            driftDelay={driftDelay} setDriftDelay={setDriftDelay} />
 
           <div
             className="overlay"

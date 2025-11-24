@@ -62,7 +62,10 @@ const validateFormula = (formulaToValidate) => {
 const ControlPanel = ({ formula, setFormula,
     isPanelOpen, setIsPanelOpen,
     size, setSize,
-    drawSpeed, setDrawSpeed }) => {
+    drawSpeed, setDrawSpeed,
+    xDrift, setXDrift,
+    yDrift, setYDrift,
+    driftDelay, setDriftDelay }) => {
     const [editorFormula, setEditorFormula] = useState(formula);
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -105,6 +108,7 @@ const ControlPanel = ({ formula, setFormula,
                     value={size}
                     onChange={(e) => setSize(parseInt(e.target.value))}
                 />
+                {/* Multiply drawspeed by 100 for visual appeal */}
                 <label htmlFor="size-input">Draw Speed: {drawSpeed * 100}</label>
                 <input
                     id="draw-speed-input"
@@ -116,6 +120,78 @@ const ControlPanel = ({ formula, setFormula,
                     value={drawSpeed}
                     onChange={(e) => setDrawSpeed(parseFloat(e.target.value))}
                 />
+                <label>Drift</label>
+                <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    marginTop: '10px',
+                    marginBottom: '20px'
+                }}>
+                    <div style={{ flex: 1 }}>
+                        <label htmlFor="drift-x" style={{ fontSize: '12px' }}>X</label>
+                        <input
+                            id="drift-x"
+                            type="number"
+                            min="0"
+                            max="50"
+                            step="0.1"
+                            value={xDrift}
+                            onChange={(e) => setXDrift(Number(e.target.value))}
+                            style={{
+                                width: '100%',
+                                padding: '8px',
+                                background: 'rgba(0, 0, 0, 0.5)',
+                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                borderRadius: '4px',
+                                color: 'white',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <label htmlFor="drift-y" style={{ fontSize: '12px' }}>Y</label>
+                        <input
+                            id="drift-y"
+                            type="number"
+                            min="0"
+                            max="50"
+                            step="0.1"
+                            value={yDrift}
+                            onChange={(e) => setYDrift(Number(e.target.value))}
+                            style={{
+                                width: '100%',
+                                padding: '8px',
+                                background: 'rgba(0, 0, 0, 0.5)',
+                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                borderRadius: '4px',
+                                color: 'white',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <label htmlFor="drift-delay" style={{ fontSize: '12px' }}>Delay</label>
+                        <input
+                            id="drift-delay"
+                            type="number"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={driftDelay}
+                            onChange={(e) => setDriftDelay(Number(e.target.value))}
+                            style={{
+                                width: '100%',
+                                padding: '8px',
+                                background: 'rgba(0, 0, 0, 0.5)',
+                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                borderRadius: '4px',
+                                color: 'white',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+                </div>
+
             </div>
         </div>
     );

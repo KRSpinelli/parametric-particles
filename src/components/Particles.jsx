@@ -4,7 +4,7 @@ import RAFManager from "raf-manager";
 import Canvas from "./Canvas";
 import CustomEmitter from "./CustomEmitter";
 
-const Particles = forwardRef(({ size, speed, formula }, ref) => {
+const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay }, ref) => {
     const canvasRef = useRef(null);
     const protonRef = useRef(null);
     const emitterRef = useRef(null);
@@ -85,7 +85,7 @@ const Particles = forwardRef(({ size, speed, formula }, ref) => {
             Proton.getSpan(13, 15),
             Proton.getSpan(0.01, 0.03)
         );
-        emitter.setSpeed(speed);
+        emitter.setDrawSpeed(drawSpeed);
         emitter.addInitialize(new Proton.Mass(1));
 
         const radiusInitializer = new Proton.Radius(size, size * 1.5);
@@ -106,7 +106,7 @@ const Particles = forwardRef(({ size, speed, formula }, ref) => {
             "dead"
         );
         emitter.addBehaviour(crossZoneBehaviour);
-        emitter.addBehaviour(new Proton.RandomDrift(2, 2, 0.02));
+        emitter.addBehaviour(new Proton.RandomDrift(xDrift, yDrift, driftDelay));
         emitter.addBehaviour(new Proton.Scale(1, 0.1));
 
         emitter.width = canvas.width;
@@ -121,7 +121,7 @@ const Particles = forwardRef(({ size, speed, formula }, ref) => {
         rendererRef.current = renderer;
         emitterRef.current = emitter;
         crossZoneBehaviourRef.current = crossZoneBehaviour;
-    }, [size, speed, createRenderer]);
+    }, [size, drawSpeed, xDrift, yDrift, driftDelay, createRenderer]);
 
     const handleCanvasInited = useCallback((canvas) => {
         canvasRef.current = canvas;
@@ -151,11 +151,19 @@ const Particles = forwardRef(({ size, speed, formula }, ref) => {
         }
     }, []);
 
-    useEffect(() => {
-        if (emitterRef.current) {
-            emitterRef.current.setSpeed(speed);
-        }
-    }, [speed]);
+    // useEffect(() => {
+    //     if (emitterRef.current) {
+    //         emitterRef.current.setDrawSpeed(drawSpeed);
+    //     }
+    // }, [drawSpeed]);
+
+    // useEffect(() => {
+    //     if (emitterRef.current) {
+    //         emitterRef.current.setXDrift(xDrift);
+    //         emitterRef.current.setYDrift(yDrift);
+    //         emitterRef.current.setDriftDelay(driftDelay);
+    //     }
+    // }, [xDrift, yDrift, driftDelay]);
 
     useEffect(() => {
         if (emitterRef.current && formula) {

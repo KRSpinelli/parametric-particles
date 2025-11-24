@@ -103,6 +103,7 @@ body {
 .control-panel {
   position: fixed;
   top: 0;
+  right: -25%;
   width: 25%;
   height: 100vh;
   background: rgba(20, 20, 20, 0.95);
@@ -113,6 +114,10 @@ body {
   display: flex;
   flex-direction: column;
   color: white;
+}
+
+.control-panel.open {
+  right: 0;
 }
 
 .control-panel-header {
