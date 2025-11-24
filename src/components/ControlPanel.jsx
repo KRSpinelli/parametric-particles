@@ -4,25 +4,24 @@ import { useState } from 'react';
 
 
 const calculateRadius = (formula, theta) => {
-    formula = formula.replace('theta', theta);
-    formula = formula.replace('sin', 'Math.sin');
-    formula = formula.replace('cos', 'Math.cos');
-    formula = formula.replace('tan', 'Math.tan');
-    formula = formula.replace('sqrt', 'Math.sqrt');
-    formula = formula.replace('abs', 'Math.abs');
-    formula = formula.replace('log', 'Math.log');
-    formula = formula.replace('exp', 'Math.exp');
-    formula = formula.replace('pi', 'Math.PI');
-    formula = formula.replace('e', 'Math.E');
+    formula = formula.replaceAll('theta', theta);
+    formula = formula.replaceAll('e', 'Math.E');
+    formula = formula.replaceAll('sin', 'Math.sin');
+    formula = formula.replaceAll('cos', 'Math.cos');
+    formula = formula.replaceAll('tan', 'Math.tan');
+    formula = formula.replaceAll('sqrt', 'Math.sqrt');
+    formula = formula.replaceAll('abs', 'Math.abs');
+    formula = formula.replaceAll('log', 'Math.log');
+    formula = formula.replaceAll('exp', 'Math.exp');
+    formula = formula.replaceAll('pi', 'Math.PI');
+
 
     let r = eval(formula);
     return r;
 }
 
 const validateFormula = (formulaToValidate) => {
-    console.log('Validating formula: ', formulaToValidate);
     if (!formulaToValidate || formulaToValidate.trim() === '') {
-        console.log('Formula is empty');
         return false;
     }
     try {
@@ -47,13 +46,12 @@ const validateFormula = (formulaToValidate) => {
         formulaToValidate = formulaToValidate.replaceAll('%', '');
         formulaToValidate = formulaToValidate.replaceAll(/\d/g, '');
         formulaToValidate = formulaToValidate.replaceAll('.', '');
+        formulaToValidate = formulaToValidate.replaceAll(' ', '');
 
         let allCharactersValid = formulaToValidate === '';
         calculateRadius(originalFormula, 5);
         let radiusValid = true;
 
-        console.log(allCharactersValid, radiusValid);
-        console.log(formulaToValidate);
         return allCharactersValid && radiusValid;
     } catch (error) {
         console.log('Error validating formula: ', error);
@@ -64,14 +62,11 @@ const validateFormula = (formulaToValidate) => {
 const ControlPanel = ({ formula, setFormula,
     isPanelOpen, setIsPanelOpen,
     size, setSize,
-    speed, setSpeed }) => {
+    drawSpeed, setDrawSpeed }) => {
     const [editorFormula, setEditorFormula] = useState(formula);
     const handleEditorFormulaChange = (e) => {
-        console.log('Formula changed to: ', e.target.value);
         setEditorFormula(e.target.value);
-        console.log('Checking if formula is valid... ', e.target.value);
         if (validateFormula(e.target.value)) {
-            console.log('Formula is valid, setting formula to: ', e.target.value);
             setFormula(e.target.value);
         }
     }
@@ -105,20 +100,21 @@ const ControlPanel = ({ formula, setFormula,
                     className="size-input"
                     type="range"
                     min="1"
-                    max="10"
+                    max="20"
+                    step="1"
                     value={size}
-                    onChange={(e) => setSize(e.target.value)}
+                    onChange={(e) => setSize(parseInt(e.target.value))}
                 />
-                <label htmlFor="size-input">Speed: {speed}</label>
+                <label htmlFor="size-input">Draw Speed: {drawSpeed * 100}</label>
                 <input
-                    id="speed-input"
-                    className="speed-input"
+                    id="draw-speed-input"
+                    className="draw-speed-input"
                     type="range"
                     min="0.01"
-                    max="1"
+                    max="0.10"
                     step="0.01"
-                    value={speed}
-                    onChange={(e) => setSpeed(e.target.value)}
+                    value={drawSpeed}
+                    onChange={(e) => setDrawSpeed(parseFloat(e.target.value))}
                 />
             </div>
         </div>

@@ -6,15 +6,15 @@ import ControlPanel from "./components/ControlPanel";
 import './App.css'
 
 function App() {
-  const [formula, setFormula] = useState('5');
+  const [formula, setFormula] = useState('50');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [size, setSize] = useState(1);
-  const [speed, setSpeed] = useState(0.01);
+  const [drawSpeed, setDrawSpeed] = useState(0.01);
   const particlesRef = useRef(null);
 
   return (
     <div className="App">
-      <Particles ref={particlesRef} size={size} speed={speed} formula={formula} />
+      <Particles ref={particlesRef} size={size} speed={drawSpeed} formula={formula} />
 
       {!isPanelOpen && (
         <div className="button-container">
@@ -41,7 +41,7 @@ function App() {
       <ControlPanel formula={formula} setFormula={setFormula}
         isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen}
         size={size} setSize={setSize}
-        speed={speed} setSpeed={setSpeed} />
+        drawSpeed={drawSpeed} setDrawSpeed={setDrawSpeed} />
 
       {isPanelOpen && (
         <div

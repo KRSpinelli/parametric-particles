@@ -8,8 +8,7 @@ class CustomEmitter extends Proton.Emitter {
         this.width = 600;
         this.height = 600;
         this.radius = 0;
-        this.tha1 = 0;
-        this.tha2 = 0;
+        this.theta = 0;
         this.xorigin = this.width / 2;
         this.yorigin = this.height / 2;
         this.data.p = new Proton.Vector2D(this.xorigin, this.yorigin);
@@ -41,20 +40,22 @@ class CustomEmitter extends Proton.Emitter {
         this.speed = parseFloat(speed);
     }
 
-    calculateRadius(formula, theta) {
-        formula = formula.replace('theta', theta);
-        formula = formula.replace('sin', 'Math.sin');
-        formula = formula.replace('cos', 'Math.cos');
-        formula = formula.replace('tan', 'Math.tan');
-        formula = formula.replace('sqrt', 'Math.sqrt');
-        formula = formula.replace('abs', 'Math.abs');
-        formula = formula.replace('log', 'Math.log');
-        formula = formula.replace('exp', 'Math.exp');
-        formula = formula.replace('pi', 'Math.PI');
-        formula = formula.replace('e', 'Math.E');
+    convertFormula(formulaToConvert, theta) {
+        formulaToConvert = formulaToConvert.replaceAll('theta', theta);
+        formulaToConvert = formulaToConvert.replaceAll('e', 'Math.E');
+        formulaToConvert = formulaToConvert.replaceAll('sin', 'Math.sin');
+        formulaToConvert = formulaToConvert.replaceAll('cos', 'Math.cos');
+        formulaToConvert = formulaToConvert.replaceAll('tan', 'Math.tan');
+        formulaToConvert = formulaToConvert.replaceAll('sqrt', 'Math.sqrt');
+        formulaToConvert = formulaToConvert.replaceAll('abs', 'Math.abs');
+        formulaToConvert = formulaToConvert.replaceAll('log', 'Math.log');
+        formulaToConvert = formulaToConvert.replaceAll('exp', 'Math.exp');
+        formulaToConvert = formulaToConvert.replaceAll('pi', 'Math.PI');
+        return formulaToConvert;
+    }
 
-        let r = eval(formula);
-        return r;
+    calculateRadius(formula, theta) {
+        return eval(this.convertFormula(formula, theta));
     }
 
     heartshape(theta) {
@@ -66,19 +67,16 @@ class CustomEmitter extends Proton.Emitter {
     }
 
     running() {
-        this.radius = this.calculateRadius(this.formula, this.tha1);
+        this.radius = this.calculateRadius(this.formula, this.theta);
 
-        this.p.x = this.radius * Math.cos(this.tha1) + this.xorigin;
-        this.p.y = this.radius * Math.sin(this.tha1) + this.yorigin;
+        this.p.x = this.radius * Math.cos(this.theta) + this.xorigin;
+        this.p.y = this.radius * Math.sin(this.theta) + this.yorigin;
 
-        this.tha1 += this.speed;
+        this.theta += this.speed;
     }
 
     calculatingAngle() {
-        this.angle =
-            Math.atan2(this.p.x - this.old.p.x, this.p.y - this.old.p.y) +
-            Math.PI / 2;
-        this.angle = -1 * this.tha1;
+        this.angle = -1 * this.theta;
     }
 }
 
