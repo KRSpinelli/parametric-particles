@@ -11,6 +11,7 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
     const rendererRef = useRef(null);
     const crossZoneBehaviourRef = useRef(null);
     const radiusInitializerRef = useRef(null);
+    const driftBehaviourRef = useRef(null);
     const hueRef = useRef(0);
     const drawEnabledRef = useRef(false);
 
@@ -106,7 +107,9 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
             "dead"
         );
         emitter.addBehaviour(crossZoneBehaviour);
-        emitter.addBehaviour(new Proton.RandomDrift(xDrift, yDrift, driftDelay));
+        const driftBehaviour = new Proton.RandomDrift(xDrift, yDrift, driftDelay);
+        emitter.addBehaviour(driftBehaviour);
+        driftBehaviourRef.current = driftBehaviour;
         emitter.addBehaviour(new Proton.Scale(1, 0.1));
 
         emitter.width = canvas.width;
@@ -151,19 +154,11 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
         }
     }, []);
 
-    // useEffect(() => {
-    //     if (emitterRef.current) {
-    //         emitterRef.current.setDrawSpeed(drawSpeed);
-    //     }
-    // }, [drawSpeed]);
-
-    // useEffect(() => {
-    //     if (emitterRef.current) {
-    //         emitterRef.current.setXDrift(xDrift);
-    //         emitterRef.current.setYDrift(yDrift);
-    //         emitterRef.current.setDriftDelay(driftDelay);
-    //     }
-    // }, [xDrift, yDrift, driftDelay]);
+    useEffect(() => {
+        if (emitterRef.current) {
+            emitterRef.current.setDrawSpeed(drawSpeed);
+        }
+    }, [drawSpeed]);
 
     useEffect(() => {
         if (emitterRef.current && formula) {
@@ -179,6 +174,15 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
             radiusInitializerRef.current = newRadiusInitializer;
         }
     }, [size]);
+
+    useEffect(() => {
+        if (emitterRef.current) {
+            emitterRef.current.removeBehaviour(driftBehaviourRef.current);
+            const newDriftBehaviour = new Proton.RandomDrift(xDrift, yDrift, driftDelay);
+            emitterRef.current.addBehaviour(newDriftBehaviour);
+            driftBehaviourRef.current = newDriftBehaviour;
+        }
+    }, [xDrift, yDrift, driftDelay]);
 
     useEffect(() => {
         return () => {
