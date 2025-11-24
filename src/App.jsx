@@ -25,6 +25,7 @@ function App() {
           >
             <SettingsIcon sx={{ fontSize: 24 }} />
           </button>
+
           <button
             className="clear-button"
             onClick={() => {
@@ -38,16 +39,20 @@ function App() {
         </div>
       )}
 
-      <ControlPanel formula={formula} setFormula={setFormula}
-        isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen}
-        size={size} setSize={setSize}
-        drawSpeed={drawSpeed} setDrawSpeed={setDrawSpeed} />
+
 
       {isPanelOpen && (
-        <div
-          className="overlay"
-          onClick={() => setIsPanelOpen(false)}
-        />
+        <>
+          <ControlPanel formula={formula} setFormula={setFormula}
+            isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen}
+            size={size} setSize={setSize}
+            drawSpeed={drawSpeed} setDrawSpeed={setDrawSpeed} />
+
+          <div
+            className="overlay"
+            onClick={() => setIsPanelOpen(false)}
+          />
+        </>
       )}
     </div>
   )
