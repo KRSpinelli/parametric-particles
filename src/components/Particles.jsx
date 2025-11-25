@@ -4,13 +4,14 @@ import RAFManager from "raf-manager";
 import Canvas from "./Canvas";
 import CustomEmitter from "./CustomEmitter";
 
-const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay }, ref) => {
+const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan }, ref) => {
     const canvasRef = useRef(null);
     const protonRef = useRef(null);
     const emitterRef = useRef(null);
     const rendererRef = useRef(null);
     const crossZoneBehaviourRef = useRef(null);
     const radiusInitializerRef = useRef(null);
+    const lifespanInitializerRef = useRef(null);
     const driftBehaviourRef = useRef(null);
     const hueRef = useRef(0);
     const drawEnabledRef = useRef(false);
@@ -93,7 +94,10 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
         emitter.addInitialize(radiusInitializer);
         radiusInitializerRef.current = radiusInitializer;
 
-        emitter.addInitialize(new Proton.Life(5, 5.5));
+        const lifespanInitializer = new Proton.Life(lifespan, lifespan + 0.5);
+        emitter.addInitialize(lifespanInitializer);
+        lifespanInitializerRef.current = lifespanInitializer;
+
         emitter.addInitialize(
             new Proton.Velocity(
                 Proton.getSpan(0.5, 1),
@@ -174,6 +178,15 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
             radiusInitializerRef.current = newRadiusInitializer;
         }
     }, [size]);
+
+    useEffect(() => {
+        if (emitterRef.current && lifespanInitializerRef.current) {
+            emitterRef.current.removeInitialize(lifespanInitializerRef.current);
+            const newLifespanInitializer = new Proton.Life(lifespan, lifespan + 0.5);
+            emitterRef.current.addInitialize(newLifespanInitializer);
+            lifespanInitializerRef.current = newLifespanInitializer;
+        }
+    }, [lifespan]);
 
     useEffect(() => {
         if (emitterRef.current) {

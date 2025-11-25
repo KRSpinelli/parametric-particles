@@ -65,7 +65,8 @@ const ControlPanel = ({ formula, setFormula,
     drawSpeed, setDrawSpeed,
     xDrift, setXDrift,
     yDrift, setYDrift,
-    driftDelay, setDriftDelay }) => {
+    driftDelay, setDriftDelay,
+    lifespan, setLifespan }) => {
     const [editorFormula, setEditorFormula] = useState(formula);
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -108,7 +109,7 @@ const ControlPanel = ({ formula, setFormula,
                     value={size}
                     onChange={(e) => setSize(parseInt(e.target.value))}
                 />
-                {/* Multiply drawspeed by 100 for visual appeal */}
+                {/* Multiply drawspeed by 100 for visual appeal. This is not an AI Comment. */}
                 <label htmlFor="size-input">Draw Speed: {drawSpeed * 100}</label>
                 <input
                     id="draw-speed-input"
@@ -190,6 +191,18 @@ const ControlPanel = ({ formula, setFormula,
                             }}
                         />
                     </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <label htmlFor="lifespan-input">Lifespan (seconds):</label>
+                    <input
+                        id="lifespan-input"
+                        className="lifespan-input"
+                        type="number"
+                        min="0"
+                        max="10"
+                        value={lifespan}
+                        onChange={(e) => setLifespan(Number(e.target.value))}
+                    />
                 </div>
 
             </div>
