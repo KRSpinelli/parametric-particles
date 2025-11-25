@@ -66,7 +66,8 @@ const ControlPanel = ({ formula, setFormula,
     xDrift, setXDrift,
     yDrift, setYDrift,
     driftDelay, setDriftDelay,
-    lifespan, setLifespan }) => {
+    lifespan, setLifespan,
+    damping, setDamping }) => {
     const [editorFormula, setEditorFormula] = useState(formula);
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -204,6 +205,18 @@ const ControlPanel = ({ formula, setFormula,
                         onChange={(e) => setLifespan(Number(e.target.value))}
                     />
                 </div>
+
+                <label htmlFor="damping-input">Damping: {damping}</label>
+                <input
+                    id="damping-input"
+                    className="damping-input"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.0001"
+                    value={damping}
+                    onChange={(e) => setDamping(Number(e.target.value))}
+                />
 
             </div>
         </div>

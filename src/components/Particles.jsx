@@ -4,7 +4,7 @@ import RAFManager from "raf-manager";
 import Canvas from "./Canvas";
 import CustomEmitter from "./CustomEmitter";
 
-const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan }, ref) => {
+const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan, damping }, ref) => {
     const canvasRef = useRef(null);
     const protonRef = useRef(null);
     const emitterRef = useRef(null);
@@ -82,7 +82,9 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
     const createProton = useCallback((canvas) => {
         const proton = new Proton();
         const emitter = new CustomEmitter();
-        emitter.damping = 0.00001;
+
+        emitter.damping = damping;
+
         emitter.rate = new Proton.Rate(
             Proton.getSpan(13, 15),
             Proton.getSpan(0.01, 0.03)
@@ -111,9 +113,11 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
             "dead"
         );
         emitter.addBehaviour(crossZoneBehaviour);
+
         const driftBehaviour = new Proton.RandomDrift(xDrift, yDrift, driftDelay);
         emitter.addBehaviour(driftBehaviour);
         driftBehaviourRef.current = driftBehaviour;
+
         emitter.addBehaviour(new Proton.Scale(1, 0.1));
 
         emitter.width = canvas.width;
@@ -128,7 +132,7 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
         rendererRef.current = renderer;
         emitterRef.current = emitter;
         crossZoneBehaviourRef.current = crossZoneBehaviour;
-    }, [size, drawSpeed, xDrift, yDrift, driftDelay, createRenderer]);
+    }, [size, drawSpeed, xDrift, yDrift, driftDelay, lifespan, damping, createRenderer]);
 
     const handleCanvasInited = useCallback((canvas) => {
         canvasRef.current = canvas;
@@ -178,6 +182,12 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
             radiusInitializerRef.current = newRadiusInitializer;
         }
     }, [size]);
+
+    useEffect(() => {
+        if (emitterRef.current && damping) {
+            emitterRef.current.damping = damping;
+        }
+    }, [damping]);
 
     useEffect(() => {
         if (emitterRef.current && lifespanInitializerRef.current) {

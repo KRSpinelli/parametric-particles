@@ -14,6 +14,7 @@ function App() {
   const [yDrift, setYDrift] = useState(5);
   const [driftDelay, setDriftDelay] = useState(0.1);
   const [lifespan, setLifespan] = useState(5);
+  const [damping, setDamping] = useState(0.0001);
   const particlesRef = useRef(null);
 
   return (
@@ -26,7 +27,8 @@ function App() {
         xDrift={xDrift}
         yDrift={yDrift}
         driftDelay={driftDelay}
-        lifespan={lifespan} />
+        lifespan={lifespan}
+        damping={damping} />
 
       {!isPanelOpen && (
         <div className="button-container">
@@ -60,7 +62,8 @@ function App() {
             xDrift={xDrift} setXDrift={setXDrift}
             yDrift={yDrift} setYDrift={setYDrift}
             driftDelay={driftDelay} setDriftDelay={setDriftDelay}
-            lifespan={lifespan} setLifespan={setLifespan} />
+            lifespan={lifespan} setLifespan={setLifespan}
+            damping={damping} setDamping={setDamping} />
 
           <div
             className="overlay"
