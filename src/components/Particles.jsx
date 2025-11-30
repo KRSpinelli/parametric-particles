@@ -17,6 +17,7 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
     const drawEnabledRef = useRef(false);
     const hueMinRef = useRef(hueMin);
     const hueMaxRef = useRef(hueMax);
+    const hueRangeRef = useRef(hueMax - hueMin);
 
     useEffect(() => {
         hueMinRef.current = hueMin;
@@ -49,16 +50,18 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
         const renderer = new Proton.CanvasRenderer(canvas);
 
         renderer.onProtonUpdate = () => {
-            hueRef.current += 1;
+            const increment = hueRangeRef.current / 360;
+            hueRef.current += increment;
             context.fillStyle = "rgba(0, 0, 0, 0.015)";
             context.fillRect(0, 0, canvas.width, canvas.height);
         };
 
         renderer.onParticleCreated = particle => {
-            let hueRange = hueMaxRef.current - hueMinRef.current;
-            if (hueRange < 0) hueRange += 360; // Handle wrapping
+            hueRangeRef.current = hueMaxRef.current - hueMinRef.current;
+            if (hueRangeRef.current < 0) hueRangeRef.current += 360; // Handle wrapping
 
-            let hue = hueMinRef.current + (hueRef.current % hueRange);
+            let hue = hueMinRef.current + (hueRef.current % hueRangeRef.current);
+            if (hueRef.current > hueRangeRef.current) hueRef.current -= hueRangeRef.current;
             if (hue >= 360) hue -= 360;
 
             particle.color = colorTemplate.replace("hue", Math.round(hue));
