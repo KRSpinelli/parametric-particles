@@ -75,12 +75,26 @@ const ControlPanel = ({ formula, setFormula,
     resetSettings,
     emitterRateNumParticles, setEmitterRateNumParticles,
     emitterRateTime, setEmitterRateTime }) => {
+
+    const heartFormula = '50*((sin(theta+pi)*sqrt(abs(cos(theta+pi))))/(sin(theta+pi)+(7/5))-(2*sin(theta+pi))+2)';
+    const circleFormula = '50';
+    const quadrifoliumFormula = '200*sin(2*theta)';
+
     const [editorFormula, setEditorFormula] = useState(formula);
+    const [activePreset, setActivePreset] = useState(null);
+
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
+        setActivePreset(null);
         if (validateFormula(e.target.value)) {
             setFormula(e.target.value);
         }
+    }
+
+    const handlePresetClick = (presetFormula, presetName) => {
+        setEditorFormula(presetFormula);
+        setFormula(presetFormula);
+        setActivePreset(presetName);
     }
     return (
         <div className={`control-panel ${isPanelOpen ? 'open' : ''}`}>
@@ -107,6 +121,7 @@ const ControlPanel = ({ formula, setFormula,
             </div>
             <div className="control-panel-content">
                 <label htmlFor="formula-input">Enter Formula:</label>
+
                 <div className="formula-input-container" style={{ display: 'flex', flexDirection: 'row' }}>
                     <p style={{ width: '30px', marginRight: '10px' }}> r =</p>
                     <textarea
@@ -118,6 +133,28 @@ const ControlPanel = ({ formula, setFormula,
                         rows="4"
                     />
                 </div>
+
+                <div style={{ display: 'flex', gap: '10px', marginTop: '10px', marginBottom: '20px' }}>
+                    <button
+                        className={`preset-button ${activePreset === 'circle' ? 'active' : ''}`}
+                        onClick={() => handlePresetClick(circleFormula, 'circle')}
+                    >
+                        Circle
+                    </button>
+                    <button
+                        className={`preset-button ${activePreset === 'heart' ? 'active' : ''}`}
+                        onClick={() => handlePresetClick(heartFormula, 'heart')}
+                    >
+                        Heart
+                    </button>
+                    <button
+                        className={`preset-button ${activePreset === 'quadrifolium' ? 'active' : ''}`}
+                        onClick={() => handlePresetClick(quadrifoliumFormula, 'quadrifolium')}
+                    >
+                        Quadrifolium
+                    </button>
+                </div>
+
                 <label htmlFor="size-input">Size: {size}</label>
                 <input
                     id="size-input"
