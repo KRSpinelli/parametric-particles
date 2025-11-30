@@ -15,7 +15,15 @@ function App() {
   const [driftDelay, setDriftDelay] = useState(0.1);
   const [lifespan, setLifespan] = useState(5);
   const [damping, setDamping] = useState(0.0001);
+  const [hueMin, setHueMin] = useState(0);
+  const [hueMax, setHueMax] = useState(360);
   const particlesRef = useRef(null);
+
+  const handleHueChange = (min, max) => {
+    setHueMin(min);
+    setHueMax(max);
+    console.log("Hue changed to ->", hueMin, hueMax);
+  };
 
   return (
     <div className="App">
@@ -28,7 +36,9 @@ function App() {
         yDrift={yDrift}
         driftDelay={driftDelay}
         lifespan={lifespan}
-        damping={damping} />
+        damping={damping}
+        hueMin={hueMin}
+        hueMax={hueMax} />
 
       {!isPanelOpen && (
         <div className="button-container">
@@ -63,7 +73,9 @@ function App() {
             yDrift={yDrift} setYDrift={setYDrift}
             driftDelay={driftDelay} setDriftDelay={setDriftDelay}
             lifespan={lifespan} setLifespan={setLifespan}
-            damping={damping} setDamping={setDamping} />
+            damping={damping} setDamping={setDamping}
+            hueMin={hueMin} hueMax={hueMax}
+            onHueChange={handleHueChange} />
 
           <div
             className="overlay"

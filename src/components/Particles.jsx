@@ -4,7 +4,7 @@ import RAFManager from "raf-manager";
 import Canvas from "./Canvas";
 import CustomEmitter from "./CustomEmitter";
 
-const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan, damping }, ref) => {
+const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan, damping, hueMin, hueMax }, ref) => {
     const canvasRef = useRef(null);
     const protonRef = useRef(null);
     const emitterRef = useRef(null);
@@ -15,6 +15,13 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
     const driftBehaviourRef = useRef(null);
     const hueRef = useRef(0);
     const drawEnabledRef = useRef(false);
+    const hueMinRef = useRef(hueMin);
+    const hueMaxRef = useRef(hueMax);
+
+    useEffect(() => {
+        hueMinRef.current = hueMin;
+        hueMaxRef.current = hueMax;
+    }, [hueMin, hueMax]);
 
     // Constants
     const drawCircle = true;
@@ -48,7 +55,13 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
         };
 
         renderer.onParticleCreated = particle => {
-            particle.color = colorTemplate.replace("hue", hueRef.current % 360);
+            let hueRange = hueMaxRef.current - hueMinRef.current;
+            if (hueRange < 0) hueRange += 360; // Handle wrapping
+
+            let hue = hueMinRef.current + (hueRef.current % hueRange);
+            if (hue >= 360) hue -= 360;
+
+            particle.color = colorTemplate.replace("hue", Math.round(hue));
         };
 
         renderer.onParticleUpdate = particle => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
+import ColorWheel from './ColorWheel';
 
 
 const calculateRadius = (formula, theta) => {
@@ -67,7 +68,8 @@ const ControlPanel = ({ formula, setFormula,
     yDrift, setYDrift,
     driftDelay, setDriftDelay,
     lifespan, setLifespan,
-    damping, setDamping }) => {
+    damping, setDamping,
+    hueMin, hueMax, onHueChange }) => {
     const [editorFormula, setEditorFormula] = useState(formula);
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -216,6 +218,13 @@ const ControlPanel = ({ formula, setFormula,
                     step="0.0001"
                     value={damping}
                     onChange={(e) => setDamping(Number(e.target.value))}
+                />
+
+                <label>Color Range</label>
+                <ColorWheel
+                    hueMin={hueMin}
+                    hueMax={hueMax}
+                    onHueChange={onHueChange}
                 />
 
             </div>
