@@ -72,7 +72,9 @@ const ControlPanel = ({ formula, setFormula,
     damping, setDamping,
     hueMin, hueMax, onHueChange,
     particleVelocity, setParticleVelocity,
-    resetSettings }) => {
+    resetSettings,
+    emitterRateNumParticles, setEmitterRateNumParticles,
+    emitterRateTime, setEmitterRateTime }) => {
     const [editorFormula, setEditorFormula] = useState(formula);
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -245,6 +247,28 @@ const ControlPanel = ({ formula, setFormula,
                     step="0.01"
                     value={particleVelocity}
                     onChange={(e) => setParticleVelocity(Number(e.target.value))}
+                />
+
+                <label>Emitter Rate: {emitterRateNumParticles}</label>
+                <input
+                    id="emitter-rate-num-particles-input"
+                    className="emitter-rate-num-particles-input"
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={emitterRateNumParticles}
+                    onChange={(e) => setEmitterRateNumParticles(Number(e.target.value))}
+                />
+                <label>Emitter Rate Time: {emitterRateTime}</label>
+                <input
+                    id="emitter-rate-time-input"
+                    className="emitter-rate-time-input"
+                    type="number"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={emitterRateTime}
+                    onChange={(e) => setEmitterRateTime(Number(e.target.value))}
                 />
 
                 <label>Color Range</label>

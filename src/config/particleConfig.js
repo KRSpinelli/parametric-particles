@@ -22,7 +22,9 @@ export const defaultParticleSettings = {
     emissionRate: {
         particles: [13, 15],
         time: [0.01, 0.03]
-    }
+    },
+    emitterRateNumParticles: 13,
+    emitterRateTime: 0.01
 };
 
 export const presets = {

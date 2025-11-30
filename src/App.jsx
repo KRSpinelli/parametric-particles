@@ -20,6 +20,8 @@ function App() {
   const [hueMax, setHueMax] = useState(defaultParticleSettings.hueMax);
   const particlesRef = useRef(null);
   const [particleVelocity, setParticleVelocity] = useState(defaultParticleSettings.particleVelocity);
+  const [emitterRateNumParticles, setEmitterRateNumParticles] = useState(defaultParticleSettings.emitterRateNumParticles);
+  const [emitterRateTime, setEmitterRateTime] = useState(defaultParticleSettings.emitterRateTime);
 
   const handleHueChange = (min, max) => {
     setHueMin(min);
@@ -35,6 +37,9 @@ function App() {
     setDriftDelay(defaultParticleSettings.driftDelay);
     setLifespan(defaultParticleSettings.lifespan);
     setDamping(defaultParticleSettings.damping);
+    setParticleVelocity(defaultParticleSettings.particleVelocity);
+    setEmitterRateNumParticles(defaultParticleSettings.emitterRateNumParticles);
+    setEmitterRateTime(defaultParticleSettings.emitterRateTime);
   };
 
   return (
@@ -52,6 +57,8 @@ function App() {
         hueMin={hueMin}
         hueMax={hueMax}
         particleVelocity={particleVelocity}
+        emitterRateNumParticles={emitterRateNumParticles}
+        emitterRateTime={emitterRateTime}
       />
 
       {!isPanelOpen && (
@@ -92,7 +99,9 @@ function App() {
             onHueChange={handleHueChange}
             particleVelocity={particleVelocity}
             setParticleVelocity={setParticleVelocity}
-            resetSettings={resetSettings} />
+            resetSettings={resetSettings}
+            emitterRateNumParticles={emitterRateNumParticles} setEmitterRateNumParticles={setEmitterRateNumParticles}
+            emitterRateTime={emitterRateTime} setEmitterRateTime={setEmitterRateTime} />
 
           <div
             className="overlay"

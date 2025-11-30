@@ -4,7 +4,7 @@ import RAFManager from "raf-manager";
 import Canvas from "./Canvas";
 import CustomEmitter from "./CustomEmitter";
 
-const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan, damping, hueMin, hueMax, particleVelocity }, ref) => {
+const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan, damping, hueMin, hueMax, particleVelocity, emitterRateNumParticles, emitterRateTime }, ref) => {
     const canvasRef = useRef(null);
     const protonRef = useRef(null);
     const emitterRef = useRef(null);
@@ -103,9 +103,10 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
         emitter.damping = damping;
 
         emitter.rate = new Proton.Rate(
-            Proton.getSpan(13, 15),
-            Proton.getSpan(0.01, 0.03)
+            Proton.getSpan(emitterRateNumParticles, emitterRateNumParticles + 2),
+            Proton.getSpan(emitterRateTime, emitterRateTime + 0.02)
         );
+
         emitter.setDrawSpeed(drawSpeed);
         emitter.addInitialize(new Proton.Mass(1));
 
@@ -210,6 +211,15 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
             lifespanInitializerRef.current = newLifespanInitializer;
         }
     }, [lifespan]);
+
+    useEffect(() => {
+        if (emitterRef.current) {
+            emitterRef.current.rate = new Proton.Rate(
+                Proton.getSpan(emitterRateNumParticles, emitterRateNumParticles + 2),
+                Proton.getSpan(emitterRateTime, emitterRateTime + 0.02)
+            );
+        }
+    }, [emitterRateNumParticles, emitterRateTime]);
 
     useEffect(() => {
         if (emitterRef.current && velocityInitializerRef.current) {
