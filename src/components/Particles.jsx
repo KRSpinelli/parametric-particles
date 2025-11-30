@@ -167,10 +167,14 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
 
     const handleMouseDown = useCallback((e) => {
         if (canvasRef.current && emitterRef.current) {
-            const context = canvasRef.current.getContext("2d");
-            context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-            emitterRef.current.removeAllParticles();
             emitterRef.current.setOrigin(e.clientX, e.clientY);
+            setTimeout(() => {
+                drawEnabledRef.current = false;
+                const context = canvasRef.current.getContext("2d");
+                context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+                emitterRef.current.removeAllParticles();
+                drawEnabledRef.current = true;
+            }, 50);
         }
     }, []);
 
