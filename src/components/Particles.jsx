@@ -25,11 +25,9 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
         hueMaxRef.current = hueMax;
     }, [hueMin, hueMax]);
 
-    // Constants
     const drawCircle = true;
     const colorTemplate = `hsla(hue,80%,50%, 0.9)`;
 
-    // Expose clearCanvas method to parent via ref
     useImperativeHandle(ref, () => ({
         clearCanvas: () => {
             if (canvasRef.current) {
