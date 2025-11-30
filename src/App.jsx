@@ -3,27 +3,38 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ClearIcon from '@mui/icons-material/Clear';
 import Particles from "./components/Particles";
 import ControlPanel from "./components/ControlPanel";
+import { defaultParticleSettings } from './config/particleConfig';
 import './App.css'
 
 function App() {
   const [formula, setFormula] = useState('50');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [size, setSize] = useState(1);
-  const [drawSpeed, setDrawSpeed] = useState(0.01);
-  const [xDrift, setXDrift] = useState(5);
-  const [yDrift, setYDrift] = useState(5);
-  const [driftDelay, setDriftDelay] = useState(0.1);
-  const [lifespan, setLifespan] = useState(5);
-  const [damping, setDamping] = useState(0.0001);
+  const [size, setSize] = useState(defaultParticleSettings.size);
+  const [drawSpeed, setDrawSpeed] = useState(defaultParticleSettings.drawSpeed);
+  const [xDrift, setXDrift] = useState(defaultParticleSettings.xDrift);
+  const [yDrift, setYDrift] = useState(defaultParticleSettings.yDrift);
+  const [driftDelay, setDriftDelay] = useState(defaultParticleSettings.driftDelay);
+  const [lifespan, setLifespan] = useState(defaultParticleSettings.lifespan);
+  const [damping, setDamping] = useState(defaultParticleSettings.damping);
   const [hueMin, setHueMin] = useState(0);
-  const [hueMax, setHueMax] = useState(360);
+  const [hueMax, setHueMax] = useState(defaultParticleSettings.hueMax);
   const particlesRef = useRef(null);
-  const [particleVelocity, setParticleVelocity] = useState(0.5);
+  const [particleVelocity, setParticleVelocity] = useState(defaultParticleSettings.particleVelocity);
 
   const handleHueChange = (min, max) => {
     setHueMin(min);
     setHueMax(max);
     console.log("Hue changed to ->", hueMin, hueMax);
+  };
+
+  const resetSettings = () => {
+    setSize(defaultParticleSettings.size);
+    setDrawSpeed(defaultParticleSettings.drawSpeed);
+    setXDrift(defaultParticleSettings.xDrift);
+    setYDrift(defaultParticleSettings.yDrift);
+    setDriftDelay(defaultParticleSettings.driftDelay);
+    setLifespan(defaultParticleSettings.lifespan);
+    setDamping(defaultParticleSettings.damping);
   };
 
   return (
@@ -80,7 +91,8 @@ function App() {
             hueMin={hueMin} hueMax={hueMax}
             onHueChange={handleHueChange}
             particleVelocity={particleVelocity}
-            setParticleVelocity={setParticleVelocity} />
+            setParticleVelocity={setParticleVelocity}
+            resetSettings={resetSettings} />
 
           <div
             className="overlay"

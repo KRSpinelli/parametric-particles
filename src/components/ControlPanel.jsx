@@ -2,6 +2,7 @@ import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import ColorWheel from './ColorWheel';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 
 const calculateRadius = (formula, theta) => {
@@ -70,7 +71,8 @@ const ControlPanel = ({ formula, setFormula,
     lifespan, setLifespan,
     damping, setDamping,
     hueMin, hueMax, onHueChange,
-    particleVelocity, setParticleVelocity }) => {
+    particleVelocity, setParticleVelocity,
+    resetSettings }) => {
     const [editorFormula, setEditorFormula] = useState(formula);
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -80,14 +82,26 @@ const ControlPanel = ({ formula, setFormula,
     }
     return (
         <div className={`control-panel ${isPanelOpen ? 'open' : ''}`}>
-            <div className="control-panel-header">
-                <h2>Formula Editor</h2>
-                <button
-                    className="close-button"
-                    onClick={() => setIsPanelOpen(false)}
-                >
-                    <CloseIcon sx={{ fontSize: 24 }} />
-                </button>
+            <div className="control-panel-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                    <h2>Settings</h2>
+                    <button
+                        className="close-button"
+                        onClick={() => setIsPanelOpen(false)}
+                    >
+                        <CloseIcon sx={{ fontSize: 24 }} />
+                    </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+                    <button
+                        className="reset-button"
+                        onClick={resetSettings}
+                    >
+                        <RestartAltIcon sx={{ fontSize: 14 }} />
+                    </button>
+                    <p>Reset to Defaults</p>
+                </div>
             </div>
             <div className="control-panel-content">
                 <label htmlFor="formula-input">Enter Formula:</label>
