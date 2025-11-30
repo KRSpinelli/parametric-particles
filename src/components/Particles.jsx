@@ -98,7 +98,7 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
 
     const createProton = useCallback((canvas) => {
         const proton = new Proton();
-        const emitter = new CustomEmitter();
+        const emitter = new CustomEmitter({ width: canvas.width, height: canvas.height });
 
         emitter.damping = damping;
 

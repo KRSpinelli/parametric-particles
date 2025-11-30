@@ -5,8 +5,8 @@ class CustomEmitter extends Proton.Emitter {
         super(conf);
 
         this.angle = 0;
-        this.width = 600;
-        this.height = 600;
+        this.width = conf.width || 600;
+        this.height = conf.height || 600;
         this.radius = 0;
         this.theta = 0;
         this.xorigin = this.width / 2;
