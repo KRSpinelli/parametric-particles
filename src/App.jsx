@@ -18,6 +18,7 @@ function App() {
   const [hueMin, setHueMin] = useState(0);
   const [hueMax, setHueMax] = useState(360);
   const particlesRef = useRef(null);
+  const [particleVelocity, setParticleVelocity] = useState(0.5);
 
   const handleHueChange = (min, max) => {
     setHueMin(min);
@@ -38,7 +39,9 @@ function App() {
         lifespan={lifespan}
         damping={damping}
         hueMin={hueMin}
-        hueMax={hueMax} />
+        hueMax={hueMax}
+        particleVelocity={particleVelocity}
+      />
 
       {!isPanelOpen && (
         <div className="button-container">
@@ -75,7 +78,9 @@ function App() {
             lifespan={lifespan} setLifespan={setLifespan}
             damping={damping} setDamping={setDamping}
             hueMin={hueMin} hueMax={hueMax}
-            onHueChange={handleHueChange} />
+            onHueChange={handleHueChange}
+            particleVelocity={particleVelocity}
+            setParticleVelocity={setParticleVelocity} />
 
           <div
             className="overlay"

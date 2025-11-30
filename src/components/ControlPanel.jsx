@@ -69,7 +69,8 @@ const ControlPanel = ({ formula, setFormula,
     driftDelay, setDriftDelay,
     lifespan, setLifespan,
     damping, setDamping,
-    hueMin, hueMax, onHueChange }) => {
+    hueMin, hueMax, onHueChange,
+    particleVelocity, setParticleVelocity }) => {
     const [editorFormula, setEditorFormula] = useState(formula);
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -218,6 +219,18 @@ const ControlPanel = ({ formula, setFormula,
                     step="0.0001"
                     value={damping}
                     onChange={(e) => setDamping(Number(e.target.value))}
+                />
+
+                <label>Particle Velocity: {particleVelocity}</label>
+                <input
+                    id="particle-velocity-input"
+                    className="particle-velocity-input"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={particleVelocity}
+                    onChange={(e) => setParticleVelocity(Number(e.target.value))}
                 />
 
                 <label>Color Range</label>

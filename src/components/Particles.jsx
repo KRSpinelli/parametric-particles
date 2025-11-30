@@ -4,7 +4,7 @@ import RAFManager from "raf-manager";
 import Canvas from "./Canvas";
 import CustomEmitter from "./CustomEmitter";
 
-const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan, damping, hueMin, hueMax }, ref) => {
+const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftDelay, lifespan, damping, hueMin, hueMax, particleVelocity }, ref) => {
     const canvasRef = useRef(null);
     const protonRef = useRef(null);
     const emitterRef = useRef(null);
@@ -12,6 +12,7 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
     const crossZoneBehaviourRef = useRef(null);
     const radiusInitializerRef = useRef(null);
     const lifespanInitializerRef = useRef(null);
+    const velocityInitializerRef = useRef(null);
     const driftBehaviourRef = useRef(null);
     const hueRef = useRef(0);
     const drawEnabledRef = useRef(false);
@@ -116,13 +117,9 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
         emitter.addInitialize(lifespanInitializer);
         lifespanInitializerRef.current = lifespanInitializer;
 
-        emitter.addInitialize(
-            new Proton.Velocity(
-                Proton.getSpan(0.5, 1),
-                90,
-                "polar"
-            )
-        );
+        const velocityInitializer = new Proton.Velocity(Proton.getSpan(particleVelocity, particleVelocity + 0.5), 90, "polar");
+        emitter.addInitialize(velocityInitializer);
+        velocityInitializerRef.current = velocityInitializer;
 
         const crossZoneBehaviour = new Proton.CrossZone(
             new Proton.RectZone(0, 0, canvas.width, canvas.height),
@@ -213,6 +210,15 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
             lifespanInitializerRef.current = newLifespanInitializer;
         }
     }, [lifespan]);
+
+    useEffect(() => {
+        if (emitterRef.current && velocityInitializerRef.current) {
+            emitterRef.current.removeInitialize(velocityInitializerRef.current);
+            const newVelocityInitializer = new Proton.Velocity(Proton.getSpan(particleVelocity, particleVelocity + 0.5), 90, "polar");
+            emitterRef.current.addInitialize(newVelocityInitializer);
+            velocityInitializerRef.current = newVelocityInitializer;
+        }
+    }, [particleVelocity]);
 
     useEffect(() => {
         if (emitterRef.current) {
