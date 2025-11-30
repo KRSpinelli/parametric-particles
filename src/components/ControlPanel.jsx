@@ -262,13 +262,13 @@ const ControlPanel = ({ formula, setFormula,
                     />
                 </div>
 
-                <label htmlFor="damping-input">Damping: {damping}</label>
+                <label htmlFor="damping-input">Damping: {Number(damping * 10000).toFixed(0)}</label>
                 <input
                     id="damping-input"
                     className="damping-input"
                     type="range"
-                    min="0"
-                    max="1"
+                    min="0.0001"
+                    max="0.001"
                     step="0.0001"
                     value={damping}
                     onChange={(e) => setDamping(Number(e.target.value))}
