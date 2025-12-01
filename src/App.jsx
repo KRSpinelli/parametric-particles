@@ -79,7 +79,8 @@ function App() {
               }
             }}
           >
-            <ClearIcon sx={{ fontSize: 24 }} />
+            Clear
+            {/* <ClearIcon sx={{ fontSize: 24 }} /> */}
           </button>
         </div>
       )}
@@ -102,11 +103,11 @@ function App() {
             resetSettings={resetSettings}
             emitterRateNumParticles={emitterRateNumParticles} setEmitterRateNumParticles={setEmitterRateNumParticles}
             emitterRateTime={emitterRateTime} setEmitterRateTime={setEmitterRateTime} />
-
+          {/* 
           <div
             className="overlay"
             onClick={() => setIsPanelOpen(false)}
-          />
+          /> */}
         </>
       )}
     </div>
