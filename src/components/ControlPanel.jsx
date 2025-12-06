@@ -62,6 +62,7 @@ const validateFormula = (formulaToValidate) => {
 }
 
 const ControlPanel = ({ formula, setFormula,
+    editorFormula, setEditorFormula,
     isPanelOpen, setIsPanelOpen,
     size, setSize,
     drawSpeed, setDrawSpeed,
@@ -73,14 +74,14 @@ const ControlPanel = ({ formula, setFormula,
     hueMin, hueMax, onHueChange,
     particleVelocity, setParticleVelocity,
     resetSettings,
+    saveSettings,
+    loadSettings,
     emitterRateNumParticles, setEmitterRateNumParticles,
     emitterRateTime, setEmitterRateTime }) => {
 
     const heartFormula = '50*((sin(theta+pi)*sqrt(abs(cos(theta+pi))))/(sin(theta+pi)+(7/5))-(2*sin(theta+pi))+2)';
     const circleFormula = '50';
     const quadrifoliumFormula = '200*sin(2*theta)';
-
-    const [editorFormula, setEditorFormula] = useState(formula);
     const [activePreset, setActivePreset] = useState(null);
 
     const handleEditorFormulaChange = (e) => {
@@ -110,14 +111,25 @@ const ControlPanel = ({ formula, setFormula,
                     </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px', gap: '8px' }}>
                     <button
                         className="reset-button"
                         onClick={resetSettings}
                     >
-
                         Reset to Defaults
                         <RestartAltIcon sx={{ fontSize: 14, marginLeft: '5px' }} />
+                    </button>
+                    <button
+                        className="save-button"
+                        onClick={saveSettings}
+                    >
+                        Save
+                    </button>
+                    <button
+                        className="load-button"
+                        onClick={loadSettings}
+                    >
+                        Load
                     </button>
                 </div>
             </div>

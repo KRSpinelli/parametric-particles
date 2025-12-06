@@ -8,6 +8,7 @@ import './App.css'
 
 function App() {
   const [formula, setFormula] = useState('50');
+  const [editorFormula, setEditorFormula] = useState(formula);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [size, setSize] = useState(defaultParticleSettings.size);
   const [drawSpeed, setDrawSpeed] = useState(defaultParticleSettings.drawSpeed);
@@ -40,6 +41,76 @@ function App() {
     setParticleVelocity(defaultParticleSettings.particleVelocity);
     setEmitterRateNumParticles(defaultParticleSettings.emitterRateNumParticles);
     setEmitterRateTime(defaultParticleSettings.emitterRateTime);
+    setFormula(defaultParticleSettings.formula);
+    setHueMin(defaultParticleSettings.hueMin);
+    setHueMax(defaultParticleSettings.hueMax);
+  };
+
+  const saveSettings = () => {
+    const config = {
+      formula,
+      size,
+      drawSpeed,
+      xDrift,
+      yDrift,
+      driftDelay,
+      lifespan,
+      damping,
+      hueMin,
+      hueMax,
+      particleVelocity,
+      emitterRateNumParticles,
+      emitterRateTime
+    };
+
+    const jsonString = JSON.stringify(config, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'particle-config.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const loadSettings = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const config = JSON.parse(event.target.result);
+            if (config.formula !== undefined) {
+              setFormula(config.formula);
+              setEditorFormula(config.formula);
+            }
+            if (config.size !== undefined) setSize(config.size);
+            if (config.drawSpeed !== undefined) setDrawSpeed(config.drawSpeed);
+            if (config.xDrift !== undefined) setXDrift(config.xDrift);
+            if (config.yDrift !== undefined) setYDrift(config.yDrift);
+            if (config.driftDelay !== undefined) setDriftDelay(config.driftDelay);
+            if (config.lifespan !== undefined) setLifespan(config.lifespan);
+            if (config.damping !== undefined) setDamping(config.damping);
+            if (config.hueMin !== undefined) setHueMin(config.hueMin);
+            if (config.hueMax !== undefined) setHueMax(config.hueMax);
+            if (config.particleVelocity !== undefined) setParticleVelocity(config.particleVelocity);
+            if (config.emitterRateNumParticles !== undefined) setEmitterRateNumParticles(config.emitterRateNumParticles);
+            if (config.emitterRateTime !== undefined) setEmitterRateTime(config.emitterRateTime);
+          } catch (error) {
+            console.error('Error parsing JSON file:', error);
+            alert('Error loading config file. Please ensure it is valid JSON.');
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
   };
 
   return (
@@ -88,6 +159,7 @@ function App() {
       {isPanelOpen && (
         <>
           <ControlPanel formula={formula} setFormula={setFormula}
+            editorFormula={editorFormula} setEditorFormula={setEditorFormula}
             isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen}
             size={size} setSize={setSize}
             drawSpeed={drawSpeed} setDrawSpeed={setDrawSpeed}
@@ -101,6 +173,8 @@ function App() {
             particleVelocity={particleVelocity}
             setParticleVelocity={setParticleVelocity}
             resetSettings={resetSettings}
+            saveSettings={saveSettings}
+            loadSettings={loadSettings}
             emitterRateNumParticles={emitterRateNumParticles} setEmitterRateNumParticles={setEmitterRateNumParticles}
             emitterRateTime={emitterRateTime} setEmitterRateTime={setEmitterRateTime} />
           {/* 
