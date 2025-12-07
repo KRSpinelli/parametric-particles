@@ -29,13 +29,20 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
     const colorTemplate = `hsla(hue,80%,50%, 0.9)`;
 
     useImperativeHandle(ref, () => ({
-        clearCanvas: () => {
-            if (canvasRef.current) {
+        clearCanvas: clearCanvas
+    }));
+
+    const clearCanvas = (e) => {
+        if (canvasRef.current && emitterRef.current) {
+            setTimeout(() => {
+                drawEnabledRef.current = false;
                 const context = canvasRef.current.getContext("2d");
                 context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-            }
+                emitterRef.current.removeAllParticles();
+                drawEnabledRef.current = true;
+            }, 50);
         }
-    }));
+    }
 
     // Render loop - useCallback to maintain stable ref and prevent react re-renders
     const renderProton = useCallback(() => {
@@ -166,16 +173,10 @@ const Particles = forwardRef(({ size, drawSpeed, formula, xDrift, yDrift, driftD
     }, []);
 
     const handleMouseDown = useCallback((e) => {
-        if (canvasRef.current && emitterRef.current) {
+        if (emitterRef.current) {
             emitterRef.current.setOrigin(e.clientX, e.clientY);
-            setTimeout(() => {
-                drawEnabledRef.current = false;
-                const context = canvasRef.current.getContext("2d");
-                context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-                emitterRef.current.removeAllParticles();
-                drawEnabledRef.current = true;
-            }, 50);
         }
+        clearCanvas(e);
     }, []);
 
     useEffect(() => {
