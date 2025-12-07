@@ -1,5 +1,7 @@
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
+import UploadIcon from '@mui/icons-material/Upload';
 import { useState, useRef, useEffect } from 'react';
 import ColorWheel from './ColorWheel';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -94,12 +96,14 @@ const ControlPanel = ({ formula, setFormula,
                         onClick={saveSettings}
                     >
                         Save
+                        <SaveIcon sx={{ fontSize: 14, marginLeft: '5px' }} />
                     </button>
                     <button
                         className="load-button"
                         onClick={loadSettings}
                     >
                         Load
+                        <UploadIcon sx={{ fontSize: 14, marginLeft: '5px' }} />
                     </button>
                 </div>
             </div>
