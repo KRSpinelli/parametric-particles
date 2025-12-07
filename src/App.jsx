@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import SettingsIcon from '@mui/icons-material/Settings';
 import ClearIcon from '@mui/icons-material/Clear';
 import Particles from "./components/Particles";
@@ -23,6 +23,12 @@ function App() {
   const [particleVelocity, setParticleVelocity] = useState(defaultParticleSettings.particleVelocity);
   const [emitterRateNumParticles, setEmitterRateNumParticles] = useState(defaultParticleSettings.emitterRateNumParticles);
   const [emitterRateTime, setEmitterRateTime] = useState(defaultParticleSettings.emitterRateTime);
+
+  useEffect(() => {
+    if (particlesRef.current) {
+      particlesRef.current.clearCanvas();
+    }
+  }, [formula]);
 
   const handleHueChange = (min, max) => {
     setHueMin(min);
