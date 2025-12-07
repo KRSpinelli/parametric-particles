@@ -161,7 +161,7 @@ const ControlPanel = ({ formula, setFormula,
                         onChange={(e) => setDrawSpeed(parseFloat(e.target.value))}
                     />
 
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px', justifyContent: 'space-between' }}>
                         <label style={{ justifySelf: 'flex-start', textAlign: 'left' }}>Emitter Rate (approx. particles per emission):</label>
                         <input
                             id="emitter-rate-num-particles-input"
@@ -174,7 +174,7 @@ const ControlPanel = ({ formula, setFormula,
                             style={{ width: '65px' }}
                         />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px', justifyContent: 'space-between' }}>
                         <label style={{ justifySelf: 'flex-start', textAlign: 'left' }}>Time between emissions (seconds): </label>
                         <input
                             id="emitter-rate-time-input"
