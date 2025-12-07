@@ -93,11 +93,35 @@ const ColorWheel = ({ hueMin, hueMax, onHueChange }) => {
         drawColorWheel();
     }, [hueMin, hueMax]);
 
-    const handleMouseDown = (e) => {
+    // Helper function to get coordinates from either mouse or touch event
+    const getEventCoordinates = (e) => {
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        // Handle touch events
+        if (e.touches && e.touches.length > 0) {
+            return {
+                x: e.touches[0].clientX - rect.left,
+                y: e.touches[0].clientY - rect.top
+            };
+        }
+        // Handle changedTouches (for touchend)
+        if (e.changedTouches && e.changedTouches.length > 0) {
+            return {
+                x: e.changedTouches[0].clientX - rect.left,
+                y: e.changedTouches[0].clientY - rect.top
+            };
+        }
+        // Handle mouse events
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
+    };
+
+    const handleStart = (e) => {
+        e.preventDefault(); // Prevent scrolling on mobile
+        const coords = getEventCoordinates(e);
+        const { x, y } = coords;
 
         const minPos = hueToPosition(hueMin);
         const maxPos = hueToPosition(hueMax);
@@ -112,13 +136,12 @@ const ColorWheel = ({ hueMin, hueMax, onHueChange }) => {
         }
     };
 
-    const handleMouseMove = (e) => {
+    const handleMove = (e) => {
         if (!dragging) return;
+        e.preventDefault(); // Prevent scrolling on mobile
 
-        const canvas = canvasRef.current;
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const coords = getEventCoordinates(e);
+        const { x, y } = coords;
 
         const dx = x - centerX;
         const dy = y - centerY;
@@ -132,17 +155,48 @@ const ColorWheel = ({ hueMin, hueMax, onHueChange }) => {
         }
     };
 
-    const handleMouseUp = () => {
+    const handleEnd = (e) => {
+        e.preventDefault();
         setDragging(null);
+    };
+
+    // Mouse event handlers
+    const handleMouseDown = (e) => {
+        handleStart(e);
+    };
+
+    const handleMouseMove = (e) => {
+        handleMove(e);
+    };
+
+    const handleMouseUp = (e) => {
+        handleEnd(e);
+    };
+
+    // Touch event handlers
+    const handleTouchStart = (e) => {
+        handleStart(e);
+    };
+
+    const handleTouchMove = (e) => {
+        handleMove(e);
+    };
+
+    const handleTouchEnd = (e) => {
+        handleEnd(e);
     };
 
     useEffect(() => {
         if (dragging) {
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleMouseUp);
+            window.addEventListener('touchmove', handleTouchMove, { passive: false });
+            window.addEventListener('touchend', handleTouchEnd, { passive: false });
             return () => {
                 window.removeEventListener('mousemove', handleMouseMove);
                 window.removeEventListener('mouseup', handleMouseUp);
+                window.removeEventListener('touchmove', handleTouchMove);
+                window.removeEventListener('touchend', handleTouchEnd);
             };
         }
     }, [dragging, hueMin, hueMax]);
@@ -154,7 +208,8 @@ const ColorWheel = ({ hueMin, hueMax, onHueChange }) => {
                 width={size}
                 height={size}
                 onMouseDown={handleMouseDown}
-                style={{ cursor: dragging ? 'grabbing' : 'grab' }}
+                onTouchStart={handleTouchStart}
+                style={{ cursor: dragging ? 'grabbing' : 'grab', touchAction: 'none' }}
             />
         </div>
     );
