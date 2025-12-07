@@ -1,6 +1,6 @@
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ColorWheel from './ColorWheel';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
@@ -83,6 +83,19 @@ const ControlPanel = ({ formula, setFormula,
     const circleFormula = '50';
     const quadrifoliumFormula = '200*sin(2*theta)';
     const [activePreset, setActivePreset] = useState(null);
+    const textareaRef = useRef(null);
+
+    const adjustTextareaHeight = () => {
+        if (textareaRef.current) {
+            // Reset height to auto to get correct scroll height
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    };
+
+    useEffect(() => {
+        adjustTextareaHeight();
+    }, [editorFormula]);
 
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -140,6 +153,7 @@ const ControlPanel = ({ formula, setFormula,
                     <div className="formula-input-container" style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
                         <p style={{ width: '30px', marginRight: '10px', marginTop: 0, paddingTop: '12px' }}> r =</p>
                         <textarea
+                            ref={textareaRef}
                             id="formula-input"
                             className={`formula-input ${editorFormula ? (validateFormula(editorFormula) ? 'valid' : 'invalid') : ''}`}
                             value={editorFormula}

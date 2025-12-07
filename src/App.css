@@ -181,6 +181,9 @@ body {
   font-size: 14px;
   resize: vertical;
   box-sizing: border-box;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .formula-input:focus {
