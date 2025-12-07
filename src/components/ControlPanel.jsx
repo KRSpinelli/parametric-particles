@@ -44,6 +44,11 @@ const ControlPanel = ({ formula, setFormula,
     const [activePreset, setActivePreset] = useState(null);
     const textareaRef = useRef(null);
 
+    // Local state for drift edit values
+    const [xDriftEdit, setXDriftEdit] = useState(xDrift.toString());
+    const [yDriftEdit, setYDriftEdit] = useState(yDrift.toString());
+    const [driftDelayEdit, setDriftDelayEdit] = useState(driftDelay.toString());
+
     const adjustTextareaHeight = () => {
         if (textareaRef.current) {
             // Reset height to auto to get correct scroll height
@@ -55,6 +60,19 @@ const ControlPanel = ({ formula, setFormula,
     useEffect(() => {
         adjustTextareaHeight();
     }, [editorFormula]);
+
+    // Sync local drift edit values when props change
+    useEffect(() => {
+        setXDriftEdit(xDrift.toString());
+    }, [xDrift]);
+
+    useEffect(() => {
+        setYDriftEdit(yDrift.toString());
+    }, [yDrift]);
+
+    useEffect(() => {
+        setDriftDelayEdit(driftDelay.toString());
+    }, [driftDelay]);
 
     const handleEditorFormulaChange = (e) => {
         setEditorFormula(e.target.value);
@@ -69,6 +87,37 @@ const ControlPanel = ({ formula, setFormula,
         setFormula(presetFormula);
         setActivePreset(presetName);
     }
+
+    // Drift input handlers with validation
+    const handleXDriftChange = (e) => {
+        const newValue = e.target.value;
+        setXDriftEdit(newValue);
+        const numValue = Number(newValue);
+        // Only update if the value is a valid number (not NaN, not empty, not just a minus sign, not ending with just a decimal)
+        if (!isNaN(numValue) && newValue !== '' && newValue !== '-' && !newValue.endsWith('.')) {
+            setXDrift(numValue);
+        }
+    };
+
+    const handleYDriftChange = (e) => {
+        const newValue = e.target.value;
+        setYDriftEdit(newValue);
+        const numValue = Number(newValue);
+        // Only update if the value is a valid number (not NaN, not empty, not just a minus sign, not ending with just a decimal)
+        if (!isNaN(numValue) && newValue !== '' && newValue !== '-' && !newValue.endsWith('.')) {
+            setYDrift(numValue);
+        }
+    };
+
+    const handleDriftDelayChange = (e) => {
+        const newValue = e.target.value;
+        setDriftDelayEdit(newValue);
+        const numValue = Number(newValue);
+        // Only update if the value is a valid number (not NaN, not empty, not just a minus sign, not ending with just a decimal)
+        if (!isNaN(numValue) && newValue !== '' && newValue !== '-' && !newValue.endsWith('.')) {
+            setDriftDelay(numValue);
+        }
+    };
     return (
         <div className={`control-panel ${isPanelOpen ? 'open' : ''}`}>
             <div className="control-panel-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -260,12 +309,12 @@ const ControlPanel = ({ formula, setFormula,
                             <label htmlFor="drift-x" style={{ fontSize: '12px', marginBottom: '5px', width: '100%', textAlign: 'center' }}>X</label>
                             <input
                                 id="drift-x"
-                                type="number"
+                                type="text"
                                 min="0"
                                 max="50"
                                 step="0.1"
-                                value={xDrift}
-                                onChange={(e) => setXDrift(Number(e.target.value))}
+                                value={xDriftEdit}
+                                onChange={handleXDriftChange}
                                 style={{
                                     width: '100%',
                                     padding: '8px',
@@ -282,12 +331,12 @@ const ControlPanel = ({ formula, setFormula,
                             <label htmlFor="drift-y" style={{ fontSize: '12px', marginBottom: '5px', width: '100%', textAlign: 'center' }}>Y</label>
                             <input
                                 id="drift-y"
-                                type="number"
+                                type="text"
                                 min="0"
                                 max="50"
                                 step="0.1"
-                                value={yDrift}
-                                onChange={(e) => setYDrift(Number(e.target.value))}
+                                value={yDriftEdit}
+                                onChange={handleYDriftChange}
                                 style={{
                                     width: '100%',
                                     padding: '8px',
@@ -304,12 +353,12 @@ const ControlPanel = ({ formula, setFormula,
                             <label htmlFor="drift-delay" style={{ fontSize: '12px', marginBottom: '5px', width: '100%', textAlign: 'center' }}>Delay</label>
                             <input
                                 id="drift-delay"
-                                type="number"
+                                type="text"
                                 min="0"
                                 max="1"
                                 step="0.01"
-                                value={driftDelay}
-                                onChange={(e) => setDriftDelay(Number(e.target.value))}
+                                value={driftDelayEdit}
+                                onChange={handleDriftDelayChange}
                                 style={{
                                     width: '100%',
                                     padding: '8px',
