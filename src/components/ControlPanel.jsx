@@ -3,58 +3,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState, useRef, useEffect } from 'react';
 import ColorWheel from './ColorWheel';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-
-
-const calculateRadius = (formula, theta) => {
-    formula = formula.replaceAll('theta', theta);
-    formula = formula.replaceAll('e', 'Math.E');
-    formula = formula.replaceAll('sin', 'Math.sin');
-    formula = formula.replaceAll('cos', 'Math.cos');
-    formula = formula.replaceAll('tan', 'Math.tan');
-    formula = formula.replaceAll('sqrt', 'Math.sqrt');
-    formula = formula.replaceAll('abs', 'Math.abs');
-    formula = formula.replaceAll('log', 'Math.log');
-    formula = formula.replaceAll('exp', 'Math.exp');
-    formula = formula.replaceAll('pi', 'Math.PI');
-
-
-    let r = eval(formula);
-    return r;
-}
+import compilePolarExpression from "../FormulaParser";
 
 const validateFormula = (formulaToValidate) => {
     if (!formulaToValidate || formulaToValidate.trim() === '') {
         return false;
     }
     try {
-        let originalFormula = formulaToValidate;
-        formulaToValidate = formulaToValidate.replaceAll('theta', '');
-        formulaToValidate = formulaToValidate.replaceAll('sin', '');
-        formulaToValidate = formulaToValidate.replaceAll('cos', '');
-        formulaToValidate = formulaToValidate.replaceAll('tan', '');
-        formulaToValidate = formulaToValidate.replace('sqrt', '');
-        formulaToValidate = formulaToValidate.replaceAll('abs', '');
-        formulaToValidate = formulaToValidate.replaceAll('log', '');
-        formulaToValidate = formulaToValidate.replaceAll('exp', '');
-        formulaToValidate = formulaToValidate.replaceAll('pi', '');
-        formulaToValidate = formulaToValidate.replaceAll('e', '');
-        formulaToValidate = formulaToValidate.replaceAll('(', '');
-        formulaToValidate = formulaToValidate.replaceAll(')', '');
-        formulaToValidate = formulaToValidate.replaceAll('*', '');
-        formulaToValidate = formulaToValidate.replaceAll('/', '');
-        formulaToValidate = formulaToValidate.replaceAll('+', '');
-        formulaToValidate = formulaToValidate.replaceAll('-', '');
-        formulaToValidate = formulaToValidate.replaceAll('^', '');
-        formulaToValidate = formulaToValidate.replaceAll('%', '');
-        formulaToValidate = formulaToValidate.replaceAll(/\d/g, '');
-        formulaToValidate = formulaToValidate.replaceAll('.', '');
-        formulaToValidate = formulaToValidate.replaceAll(' ', '');
-
-        let allCharactersValid = formulaToValidate === '';
-        calculateRadius(originalFormula, 5);
-        let radiusValid = true;
-
-        return allCharactersValid && radiusValid;
+        const result = compilePolarExpression(formulaToValidate);
+        return result.ok;
     } catch (error) {
         console.log('Error validating formula: ', error);
         return false;

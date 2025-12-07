@@ -1,4 +1,5 @@
 import Proton from "proton-engine";
+import compilePolarExpression from "../FormulaParser";
 
 class CustomEmitter extends Proton.Emitter {
     constructor(conf = {}) {
@@ -40,22 +41,9 @@ class CustomEmitter extends Proton.Emitter {
         this.speed = parseFloat(speed);
     }
 
-    convertFormula(formulaToConvert, theta) {
-        formulaToConvert = formulaToConvert.replaceAll('theta', theta);
-        formulaToConvert = formulaToConvert.replaceAll('e', 'Math.E');
-        formulaToConvert = formulaToConvert.replaceAll('sin', 'Math.sin');
-        formulaToConvert = formulaToConvert.replaceAll('cos', 'Math.cos');
-        formulaToConvert = formulaToConvert.replaceAll('tan', 'Math.tan');
-        formulaToConvert = formulaToConvert.replaceAll('sqrt', 'Math.sqrt');
-        formulaToConvert = formulaToConvert.replaceAll('abs', 'Math.abs');
-        formulaToConvert = formulaToConvert.replaceAll('log', 'Math.log');
-        formulaToConvert = formulaToConvert.replaceAll('exp', 'Math.exp');
-        formulaToConvert = formulaToConvert.replaceAll('pi', 'Math.PI');
-        return formulaToConvert;
-    }
-
     calculateRadius(formula, theta) {
-        return eval(this.convertFormula(formula, theta));
+        const result = compilePolarExpression(formula);
+        return result.fn(theta);
     }
 
     heartshape(theta) {
