@@ -1,13 +1,13 @@
 export const defaultParticleSettings = {
-    formula: '50',
-    size: 1,
-    drawSpeed: 0.01,
+    formula: '200*sin(2*theta)',
+    size: 4,
+    drawSpeed: 0.03,
     xDrift: 1,
     yDrift: 1,
     driftDelay: 0.1,
     lifespan: 5,
     damping: 0.0001,
-    particleVelocity: 0.5,
+    particleVelocity: 0.2,
     hueMin: 0,
     hueMax: 360,
     velocity: {
@@ -20,7 +20,7 @@ export const defaultParticleSettings = {
         end: 0.1
     },
     emissionRate: {
-        particles: [13, 15],
+        particles: [20, 22],
         time: [0.01, 0.03]
     },
     emitterRateNumParticles: 13,

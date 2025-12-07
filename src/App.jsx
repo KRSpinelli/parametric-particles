@@ -7,7 +7,7 @@ import { defaultParticleSettings } from './config/particleConfig';
 import './App.css'
 
 function App() {
-  const [formula, setFormula] = useState('50');
+  const [formula, setFormula] = useState(defaultParticleSettings.formula);
   const [editorFormula, setEditorFormula] = useState(formula);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [size, setSize] = useState(defaultParticleSettings.size);
